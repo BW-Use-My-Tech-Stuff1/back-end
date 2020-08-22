@@ -12,7 +12,9 @@ server.use(logger)
 
 
 server.get('/', (req, res) => {
-  res.send('<h2>Server is up!</h2>')
+  const message = process.env.MESSAGE || "hello from code";
+
+  res.send(`<h2>${message}</h2>`)
 })
 
 function logger(req, res, next) {
