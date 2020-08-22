@@ -3,12 +3,18 @@ const helmet = require('helmet')
 const cors = require('cors')
 const morgan = require('morgan')
 
+const authRouter = require('../auth/authRouter')
+
 const server = express()
 
 server.use(express.json())
 server.use(helmet())
 server.use(cors())
 server.use(logger)
+
+
+// Routes
+server.use("/api", authRouter)
 
 
 server.get('/', (req, res) => {
