@@ -4,6 +4,8 @@ const cors = require('cors')
 const morgan = require('morgan')
 
 const authRouter = require('../auth/authRouter')
+const usersRouter = require("../users/usersRouter")
+const restricted = require("../auth/restrictedMiddleware")
 
 const server = express()
 
@@ -15,6 +17,7 @@ server.use(logger)
 
 // Routes
 server.use("/api", authRouter)
+server.use("/api/users", restricted, usersRouter)
 
 
 server.get('/', (req, res) => {

@@ -10,7 +10,7 @@ router.post("/register", (req, res) => {
   const credentials = req.body;
 
   if (isValid(credentials)) {
-    const rounds = 4
+    const rounds = 4;
 
     const hash = bcryptjs.hashSync(credentials.password, rounds);
 
@@ -18,9 +18,7 @@ router.post("/register", (req, res) => {
 
     Users.add(credentials)
       .then((user) => {
-        const token = makeJwt(user);
-
-        res.status(201).json({ data: user[0], token });
+        res.status(201).json({ data: user });
       })
       .catch((error) => {
         res.status(500).json({ message: error.message });
@@ -59,32 +57,31 @@ router.post("/login", (req, res) => {
   }
 });
 
+router.put("/users/:id", (req, res) => {
+  if (req.body.password) {
+    const rounds = 4;
+    const hash = bcryptjs.hashSync(req.body.password, rounds);
+    req.body.password = hash;
+  }
 
-router.put('/users/:id', (req, res) => {
-    if (req.body.password) {
-        const rounds = 4
-        const hash = bcryptjs.hashSync(req.body.password, rounds);
-        req.body.password = hash;
-    }
-    
-    Users.findById(req.params.id)
-        .then(user => {
-            if (user) {
-                Users.update(req.body, req.params.id)
-                    .then(changed => {
-                        res.status(200).json(changed);
-                    })
-                    .catch(err => {
-                        res.status(500).json(err);
-                    })
-            } else {
-                res.status(404).json({ error: 'user could not be found' });
-            }
-        })
-        .catch(err => {
+  Users.findById(req.params.id)
+    .then((user) => {
+      if (user) {
+        Users.update(req.body, req.params.id)
+          .then((changed) => {
+            res.status(200).json(changed);
+          })
+          .catch((err) => {
             res.status(500).json(err);
-        })
-})
+          });
+      } else {
+        res.status(404).json({ error: "user could not be found" });
+      }
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+});
 
 function makeJwt(user) {
   const payload = {
