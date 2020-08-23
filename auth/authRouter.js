@@ -5,8 +5,8 @@ const router = require("express").Router();
 const Users = require("../users/usersModel");
 const { isValid } = require("../users/usersService");
 
-// Register new user and include token
-router.post("/register", (req, res) => {
+// SignUp new user and include token
+router.post("/signup", (req, res) => {
   const credentials = req.body;
 
   if (isValid(credentials)) {
