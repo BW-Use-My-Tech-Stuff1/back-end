@@ -26,6 +26,7 @@ router.get('/:id', (req, res) => {
         })
 })
 
+// Update a Tech Item
 router.put('/:id', (req, res) => {
     Tech.findById(req.params.id)
         .then(techItem => {
